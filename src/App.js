@@ -2,25 +2,60 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+function beerLover(props){
+  let info=(
+    <div>
+      <span>{props.beer.name}</span>
+      {""}
+      <span>{props.beer.unit}</span>
+    </div>
+  )
+
+  return(
+    <div>
+      <button onClick={props.onclick}>Like it</button>
     </div>
   );
 }
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    results:[],
+    twist: null
+    };
+  }
+  componentDidMount() {
+    fetch('https://api.punkapi.com/v2/')
+      .then((res)=> {
+         return res.json()
+      })
+      .then((json)=> {
+        this.setState({
+          results:json.results
+        })
+      })
+}
+onClick=(event) =>{
+  this.setState({
+   twist:" "
+  });
+}
+  render() {
+    return(
+      <div className="root">
+        {
+            this.state.results.map((beer, index)=> 
+          <beerLover
+          key={index}
+          onClick={this.onClick}
+          /> 
+        )}
+      </div>
+    );
+  }
+}
 
 export default App;
+
+
